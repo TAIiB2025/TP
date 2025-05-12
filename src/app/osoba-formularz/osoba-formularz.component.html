@@ -1,0 +1,19 @@
+<hr>
+<form #osobaFormularz="ngForm" (ngSubmit)="onSubmit(osobaFormularz)">
+    <div>
+        <label>Imię: </label>
+        <input name="imie" type="text" [(ngModel)]="imie" required maxlength="20"/>
+    </div>
+    <div>
+        <label>Nazwisko: </label>
+        <input name="nazwisko" type="text" [(ngModel)]="nazwisko" required maxlength="50"/>
+    </div>
+    <div>
+        <label>Wiek: </label>
+        <input name="wiek" type="number" [(ngModel)]="wiek" (ngModelChange)="onWiekChange($event)" required min="10" max="200"/>
+    </div>
+
+    <input type="submit" value="Zapisz" [disabled]="osobaFormularz.form.invalid"/>
+    <input type="reset" value="Wyczyść"/>
+    <input type="button" value="Anuluj" (click)="onAnuluj()"/>
+</form>

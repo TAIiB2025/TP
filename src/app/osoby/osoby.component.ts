@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Osoba } from '../../models/osoba.class';
 import { LicznikComponent } from '../licznik/licznik.component';
 import { OsobaComponent } from '../osoba/osoba.component';
 import { ZaznaczoneOsobyComponent } from '../zaznaczone-osoby/zaznaczone-osoby.component';
+import { OsobyService } from '../osoby.service';
 
 @Component({
   selector: 'app-osoby',
@@ -12,22 +13,23 @@ import { ZaznaczoneOsobyComponent } from '../zaznaczone-osoby/zaznaczone-osoby.c
   styleUrl: './osoby.component.css'
 })
 export class OsobyComponent {
-  osoby: Osoba[] = [
-    new Osoba("Jan", "Kowalski", 33, false),
-    new Osoba("Anna", "Nowak", 44, false),
-    new Osoba("Adam", "XXX", 13, true),
-    new Osoba("Ewelina", "YYY", 41, false),
-  ];
+  private readonly osobyService = inject(OsobyService);
+
+  osoby: Osoba[] = [];
 
   licznik = 0;
   wyswietlLicznik = true;
 
   constructor() {
-    for(let os of this.osoby) {
-      if(os.czyWyrozniona) {
-        this.licznik++;
+    this.osobyService.get().subscribe(res => {
+      for(let os of res) {
+        if(os.czyWyrozniona) {
+          this.licznik++;
+        }
       }
-    }
+
+      this.osoby = res;
+    })
   }
 
   onZmianaWyroznienia(event: Osoba): void {
